@@ -87,6 +87,7 @@ export const ViewProductForPurchase = async (req, res, next) => {
       .json({ error: "Internal Server Error", status: false });
   }
 };
+
 export const ViewProductById = async (req, res, next) => {
   try {
     let product = await Product.findById({ _id: req.params.id });
