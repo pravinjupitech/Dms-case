@@ -59,9 +59,9 @@ export const SaveProduct = async (req, res) => {
 export const ViewProduct = async (req, res, next) => {
   try {
     // const userId = req.params.id;
-    // const database = req.params.database;
+    const database = req.params.database;
     const product = await Product.find({
-      // database: database,
+      database: database,
       status: "Active",
     }).sort({ sortorder: -1 });
     // .populate({ path: "warehouse", model: "warehouse" });

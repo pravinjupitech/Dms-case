@@ -44,7 +44,7 @@ router.post(
   updateItemWithExcel
 );
 router.post("/add-product", SaveProduct);
-router.get("/view-product", ViewProduct);
+router.get("/view-product/:database", ViewProduct);
 router.get("/view-product-purchase/:database", ViewProductForPurchase);
 router.get("/view-by-id/:id", ViewProductById);
 router.delete("/remove-product/:id", DeleteProduct);
