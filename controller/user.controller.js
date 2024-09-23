@@ -1255,3 +1255,16 @@ export const customId = async (req, res, next) => {
       .json({ message: "Internal Server Error", status: false });
   }
 };
+
+export const userFindByDatabase = async (req, res, next) => {
+  try {
+    const database = req.params.database;
+    const user = await User.find({ status: "Active", database: database });
+    return user.length > 0
+      ? res.status(200).json({ message: "Data Found", user, status: true })
+      : res.status(404).json({ message: "Not Found", status: false });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error", status: false });
+  }
+};
