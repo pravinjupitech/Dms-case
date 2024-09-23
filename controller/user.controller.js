@@ -229,41 +229,38 @@ const otpStore = {};
 
 export const SignIn = async (req, res, next) => {
   try {
-    const otp = Math.floor(1000 + Math.random() * 9000);
+    // const otp = Math.floor(1000 + Math.random() * 9000);
     const { email, password, latitude, longitude, currentAddress } = req.body;
-    let existingAccount = await User.findOne({ email })
-      .populate({ path: "rolename", model: "role" })
-      .populate({ path: "branch", model: "userBranch" });
-    let existingCustomer = await Customer.findOne({ email }).populate({
-      path: "rolename",
-      model: "role",
-    });
-    if (!existingAccount && !existingCustomer) {
+    let existingAccount = await User.findOne({ email });
+    // .populate({ path: "rolename", model: "role" })
+    // .populate({ path: "branch", model: "userBranch" });
+    // let existingCustomer = await Customer.findOne({ email }).populate({
+    //   path: "rolename",
+    //   model: "role",
+    // });
+    if (!existingAccount /*&& !existingCustomer*/) {
       return res
         .status(400)
         .json({ message: "Incorrect email", status: false });
     }
-    if (existingAccount) {
-      if (existingAccount.rolename.roleName === "MASTER") {
-        existingAccount.otp = otp;
-        await LoginVerificationMail(existingAccount, otp);
-        await existingAccount.save();
-        return res.status(200).json({
-          message: "otp send successfull!",
-          user: {
-            ...existingAccount.toObject(),
-            password: undefined,
-            otp: undefined,
-            role: "MASTER",
-          },
-          status: true,
-        });
-      }
-    }
-    if (
-      (existingAccount && existingAccount.password !== password) ||
-      (existingCustomer && existingCustomer.password !== password)
-    ) {
+    // if (existingAccount) {
+    //   // if (existingAccount.rolename.roleName === "MASTER") {
+    //   //   existingAccount.otp = otp;
+    //   //   await LoginVerificationMail(existingAccount, otp);
+    //   //   await existingAccount.save();
+    //   return res.status(200).json({
+    //     message: "otp send successfull!",
+    //     user: {
+    //       ...existingAccount.toObject(),
+    //       password: undefined,
+    //       otp: undefined,
+    //       role: "MASTER",
+    //     },
+    //     status: true,
+    //   });
+    // }
+    // }
+    if (existingAccount && existingAccount.password !== password) {
       return res
         .status(400)
         .json({ message: "Incorrect password", status: false });
@@ -280,17 +277,17 @@ export const SignIn = async (req, res, next) => {
         status: true,
       });
     }
-    if (existingCustomer) {
-      await Customer.updateOne(
-        { email },
-        { $set: { latitude, longitude, currentAddress } }
-      );
-      return res.json({
-        message: "Login successful",
-        user: { ...existingCustomer.toObject(), password: undefined, token },
-        status: true,
-      });
-    }
+    // if (existingCustomer) {
+    //   await Customer.updateOne(
+    //     { email },
+    //     { $set: { latitude, longitude, currentAddress } }
+    //   );
+    //   return res.json({
+    //     message: "Login successful",
+    //     user: { ...existingCustomer.toObject(), password: undefined, token },
+    //     status: true,
+    //   });
+    // }
   } catch (err) {
     console.error(err);
     return res
