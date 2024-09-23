@@ -231,7 +231,7 @@ export const SignIn = async (req, res, next) => {
   try {
     // const otp = Math.floor(1000 + Math.random() * 9000);
     const { email, password, latitude, longitude, currentAddress } = req.body;
-    let existingAccount = await User.findOne({ email });
+    let existingAccount = await User.findOne({ email, status: "Active" });
     // .populate({ path: "rolename", model: "role" })
     // .populate({ path: "branch", model: "userBranch" });
     // let existingCustomer = await Customer.findOne({ email }).populate({
@@ -239,9 +239,7 @@ export const SignIn = async (req, res, next) => {
     //   model: "role",
     // });
     if (!existingAccount /*&& !existingCustomer*/) {
-      return res
-        .status(400)
-        .json({ message: "Incorrect email", status: false });
+      return res.status(400).json({ message: "Not Found", status: false });
     }
     // if (existingAccount) {
     //   // if (existingAccount.rolename.roleName === "MASTER") {
